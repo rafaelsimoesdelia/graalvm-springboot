@@ -1,0 +1,28 @@
+# etapa 1: build nativo
+FROM ghcr.io/graalvm/native-image-community:21 AS build
+
+WORKDIR /app
+# copia tudo (incluindo .mvn/, pom.xml, src/)
+COPY . .
+
+# compila o binário nativo (leva alguns minutos)
+RUN ./mvnw clean package -Pnative -DskipTests
+
+# etapa 2: imagem final enxuta
+FROM ubuntu:22.04
+
+# garante locale, CA certs e tini (entrypoint)
+RUN apt-get update && apt-get install -y \
+    ca-certificates \
+    tini \
+  && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+# copia o binário compilado
+COPY --from=build /app/target/graalVM-teste /app/ms-native
+
+# expõe porta
+EXPOSE 8080
+
+# usa tini para reapidar processos zombie
+ENTRYPOINT ["/usr/bin/tini", "--", "/app/ms-native"]

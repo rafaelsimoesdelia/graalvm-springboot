@@ -1,0 +1,9 @@
+version: '3.8'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.native
+    image: graalvm-teste:latest
+    ports:
+      - "8080:8080"
