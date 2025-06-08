@@ -8,6 +8,10 @@ class GraalVmTesteApplicationTests {
 
 	@Test
 	void contextLoads() {
+		// This test method is intentionally empty.
+		// It verifies that the Spring Boot application context loads successfully
+		// without any configuration errors or missing dependencies.
+		// The test passes if no exceptions are thrown during context initialization.
 	}
 
 }

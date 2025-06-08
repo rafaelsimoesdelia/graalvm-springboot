@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+
+    <!-- Configuração de log personalizada para reduzir verbosidade -->
+    <springProfile name="!dev">
+        <!-- Azure SDK - reduzir logs de debug -->
+        <logger name="com.azure.core" level="WARN"/>
+        <logger name="com.azure.identity" level="INFO"/>
+        <logger name="com.azure.security.keyvault" level="INFO"/>
+        <logger name="com.azure.core.implementation" level="WARN"/>
+        <logger name="com.azure.core.util" level="WARN"/>
+        <logger name="com.azure.core.http" level="WARN"/>
+        
+        <!-- Netty - reduzir logs -->
+        <logger name="io.netty" level="WARN"/>
+        <logger name="reactor.netty" level="WARN"/>
+        
+        <!-- Micrometer - reduzir warning sobre GC -->
+        <logger name="io.micrometer.core.instrument.binder.jvm.JvmGcMetrics" level="ERROR"/>
+        
+        <!-- HTTP clients -->
+        <logger name="org.apache.http" level="WARN"/>
+        <logger name="httpclient.wire" level="WARN"/>
+        
+        <!-- Aplicação -->
+        <logger name="com.example.api" level="INFO"/>
+        
+        <!-- Root level -->
+        <root level="INFO">
+            <appender-ref ref="CONSOLE" />
+        </root>
+    </springProfile>
+
+    <!-- Profile de desenvolvimento com mais logs -->
+    <springProfile name="dev">
+        <logger name="com.azure.core" level="DEBUG"/>
+        <logger name="com.example.api" level="DEBUG"/>
+        
+        <root level="INFO">
+            <appender-ref ref="CONSOLE" />
+        </root>
+    </springProfile>
+</configuration> 

@@ -2,27 +2,50 @@
 FROM ghcr.io/graalvm/native-image-community:21 AS build
 
 WORKDIR /app
-# copia tudo (incluindo .mvn/, pom.xml, src/)
-COPY . .
 
-# compila o binário nativo (leva alguns minutos)
-RUN ./mvnw clean package -Pnative -DskipTests
+# copia arquivos de configuração primeiro para melhor cache
+COPY pom.xml ./
+COPY .mvn .mvn
+COPY mvnw ./
+COPY mvnw.cmd ./
+
+# baixa dependências primeiro
+RUN ./mvnw dependency:resolve
+
+# copia o código fonte
+COPY src ./src
+
+# compila o binário nativo
+RUN ./mvnw clean package -Pnative -DskipTests -Dspring-boot.build-image.skip=true
+
+# verifica se o binário foi gerado
+RUN ls -la target/ && \
+    echo "Native binary size: $(stat -c%s target/graalVM-teste 2>/dev/null || echo "0") bytes"
 
 # etapa 2: imagem final enxuta
 FROM ubuntu:22.04
 
-# garante locale, CA certs e tini (entrypoint)
+# instala dependências necessárias
 RUN apt-get update && apt-get install -y \
     ca-certificates \
     tini \
-  && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && update-ca-certificates
 
 WORKDIR /app
+
 # copia o binário compilado
 COPY --from=build /app/target/graalVM-teste /app/ms-native
+
+# torna executável
+RUN chmod +x /app/ms-native
+
+# verifica se o arquivo foi copiado e tem tamanho correto
+RUN ls -la /app/ms-native && \
+    echo "File size: $(stat -c%s /app/ms-native) bytes"
 
 # expõe porta
 EXPOSE 8080
 
-# usa tini para reapidar processos zombie
-ENTRYPOINT ["/usr/bin/tini", "--", "/app/ms-native"]
+# executa como root por enquanto para debug
+ENTRYPOINT ["/app/ms-native"]

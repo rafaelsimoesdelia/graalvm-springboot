@@ -1,0 +1,20 @@
+[
+  {
+    "name": "java.net.InetAddress",
+    "methods": [
+      {
+        "name": "getLocalHost",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "java.security.SecureRandom",
+    "methods": [
+      {
+        "name": "nextBytes",
+        "parameterTypes": ["byte[]"]
+      }
+    ]
+  }
+] 

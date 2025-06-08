@@ -1,0 +1,27 @@
+{
+  "resources": {
+    "includes": [
+      {
+        "pattern": "\\Qapplication.properties\\E"
+      },
+      {
+        "pattern": "\\Qapplication.yml\\E"
+      },
+      {
+        "pattern": "\\Qapplication.yaml\\E"
+      },
+      {
+        "pattern": "\\QMETA-INF/services/.*\\E"
+      },
+      {
+        "pattern": "\\Qazure-identity.properties\\E"
+      },
+      {
+        "pattern": "\\Qazure-core.properties\\E"
+      },
+      {
+        "pattern": "\\Q.*\\.json\\E"
+      }
+    ]
+  }
+} 

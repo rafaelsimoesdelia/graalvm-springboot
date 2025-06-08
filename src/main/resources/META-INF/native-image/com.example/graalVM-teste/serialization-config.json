@@ -1,0 +1,17 @@
+[
+  {
+    "name": "com.azure.security.keyvault.secrets.models.KeyVaultSecret"
+  },
+  {
+    "name": "com.azure.security.keyvault.secrets.implementation.models.SecretBundle"
+  },
+  {
+    "name": "com.azure.security.keyvault.secrets.implementation.models.SecretItem"
+  },
+  {
+    "name": "com.azure.security.keyvault.secrets.implementation.models.SecretAttributes"
+  },
+  {
+    "name": "com.azure.security.keyvault.secrets.implementation.models.SecretProperties"
+  }
+] 

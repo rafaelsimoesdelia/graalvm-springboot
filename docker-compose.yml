@@ -1,9 +1,14 @@
-version: '3.8'
 services:
   app:
     build:
       context: .
       dockerfile: Dockerfile.native
     image: graalvm-teste:latest
+    environment:
+      - SPRING_PROFILES_ACTIVE=stack
+      - AZURE_ENDPOINT=<VALUE>
+      - AZURE_TENANT_ID=<VALUE>
+      - AZURE_CLIENT_ID=<VALUE>
+      - AZURE_CLIENT_SECRET=<VALUE>
     ports:
       - "8080:8080"
